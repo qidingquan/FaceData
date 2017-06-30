@@ -1,0 +1,266 @@
+Persons表如下：
+Id_P	LastName	FirstName	Address         	City     	Number
+1		Adams	      John	    Oxford Street	   London    	1123
+2		Bush	      George	Fifth Avenue	   New York   	1233
+3		Carter	      Thomas	Changan Street	   Beijing    	1806
+4  		Carter	      Hearm	 	MaTou Street	   Beijing     	899
+Orders表如下：
+Id_O	OrderNo		Id_P
+1		77895		3
+2		44678		3
+3		22456		1
+4		24562		1
+5		34764		65
+
+1.从表中选取 LastName 列的数据：SELECT LastName FROM Persons
+重要事项：一定要记住，SQL 对大小写不敏感！
+
+一.可以把 SQL 分为两个部分：数据操作语言 (DML) 和 数据定义语言 (DDL)。
+
+（一）SQL 的 DML 部分：
+SELECT - 从数据库表中获取数据
+UPDATE - 更新数据库表中的数据
+DELETE - 从数据库表中删除数据
+INSERT INTO - 向数据库表中插入数据
+（二）SQL 的 DDL 部分
+CREATE DATABASE - 创建新数据库
+ALTER DATABASE - 修改数据库
+CREATE TABLE - 创建新表
+ALTER TABLE - 变更（改变）数据库表
+DROP TABLE - 删除表
+CREATE INDEX - 创建索引（搜索键）
+DROP INDEX - 删除索引
+
+二.SELECT 语法
+SELECT 列名称 FROM 表名称   -以及- SELECT * FROM 表名称
+例子1：从Persons表获取名为 "LastName" 和 "FirstName" 的列的内容
+select LastName,FirstName from Persons;
+例子2：从 "Persons" 表中选取所有的列。
+select * from Persons;
+
+三. DISTINCT 语句
+关键词 DISTINCT 用于返回唯一不同的值。
+语法：SELECT DISTINCT 列名称 FROM 表名称
+例子1：从 Persons表中查询LastName列中的不重复的值
+SELECT DISTINCT LastName FROM Persons 
+
+四.WHERE 子句
+语法:SELECT 列名称 FROM 表名称 WHERE 列 运算符 值
+运算符如下：=等于，<>（!=）不等于，>大于，<小于，>=大于等于，<=小于等于，BETWEEN在某个范围内，LIKE搜索某种模式
+例子1：从Persons表选取居住在城市 "Beijing" 中的人
+select * from Persons WHERE City = 'Beijing';
+注意：SQL 使用单引号来环绕文本值（大部分数据库系统也接受双引号）。如果是数值，请不要使用引号。
+
+五.AND 和 OR 运算符
+AND 和 OR 可在 WHERE 子语句中把两个或多个条件结合起来。
+如果第一个条件和第二个条件都成立，则 AND 运算符显示一条记录。
+如果第一个条件和第二个条件中只要有一个成立，则 OR 运算符显示一条记录。
+例子1：从Persons表中查询LastName为"Carter" FirstName为 "Thomas" 的人
+select * from Persons where FirstName = 'Thomas' AND LastName='Carter';
+例子2：从Persons表中查询City为Beijing和London的人
+select * from Persons where City='Beijing' or City='London';
+例子3: 从Persons表中查询为City在Beijing，FirstName为Hearm和Thomas的人
+select * from Persons where City='Beijing' AND (FirstName='Hearm' or FirstName='Thomas');
+
+六.ORDER BY 语句
+ORDER BY 语句用于根据指定的列对结果集进行排序。
+ORDER BY 语句默认按照升序对记录进行排序。
+如果您希望按照降序对记录进行排序，可以使用 DESC 关键字。ASC表示升序
+例子1：从Persons表中按FirstName的字母顺序进行显示
+select * from Persons ORDER BY FirstName;(升序)
+select * from Persons ORDER BY FirstName DESC（降序）
+例子2：从Persons表中以字母顺序显示FirstName，并以数字顺序显示顺序号Number：
+select FirstName,Number from Persons ORDER BY FirstName,Number;
+
+七.INSERT INTO 语句
+INSERT INTO 语句用于向表格中插入新的行。
+语法 INSERT INTO 表名称 VALUES (值1, 值2,....)  或者 INSERT INTO table_name (列1, 列2,...) VALUES (值1, 值2,....)
+例子1：从Persons表中添加一个City在成都，FirstName为QQ,LastName为NB,Address为中国，Number为1的数据
+insert into Persons (FirstName,LastName,Address,City,Number) values ('QQ','NB','中国','成都',1);
+
+八.Update 语句
+Update 语句用于修改表中的数据。
+语法：UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值
+例子1：将Persons表中FirstName为Hearm的人，City值改为阆中
+update Persons set City='阆中' where FirstName='Hearm'；
+例子2：将Persons表中FirstName为Hearm的人，City值改为阆中，LastName值改为不好玩
+update Persons set City='阆中',LastName='不好玩' where FirstName='Hearm';
+
+九.DELETE 语句
+DELETE 语句用于删除表中的行。
+语法 DELETE FROM 表名称 WHERE 列名称 = 值
+例子1:从Persons表中删除FirstName为Hearm的人
+delete from Persons where FirstName='Hearm';
+例子2：将Persons表中所有行的数据清空
+delete * from Persons;
+
+十.TOP 子句
+TOP 子句用于规定要返回的记录的数目。
+对于拥有数千条记录的大型表来说，TOP 子句是非常有用的。
+注释：并非所有的数据库系统都支持 TOP 子句。
+SQL Server 的语法：SELECT TOP number|percent column_name(s) FROM table_name
+MySQL 语法: SELECT column_name(s) FROM table_name LIMIT number
+例子1：从Persons表中选取头两条记录
+select top 2 * from Persons;
+select * from Persons limit 2;
+例子2：从Persons表中选取 50% 的记录
+select TOP 50 PERCENT * FROM Persons;
+
+十一.LIKE 操作符
+LIKE 操作符用于在 WHERE 子句中搜索列中的指定模式。
+SQL LIKE 操作符语法: SELECT column_name(s) FROM table_name WHERE column_name LIKE pattern
+例子1：从Persons表中选取居住在以 "N" 开始的城市里的人
+select * from Persons where City LIKE 'N%';
+提示："%" 可用于定义通配符（模式中缺少的字母）。
+例子2：从Persons表中选取居住在以 "g" 结尾的城市里的人
+select * from Persons where City like '%g';
+例子3：从 "Persons" 表中选取居住在包含 "lon" 的城市里的人
+select * from Persons WHERE City like '%lon%';
+例子4：从 "Persons" 表中选取居住在不包含 "lon" 的城市里的人
+select * from Persons where City not like '%lon%'
+
+十二.SQL 通配符
+在搜索数据库中的数据时，SQL 通配符可以替代一个或多个字符。
+SQL 通配符必须与 LIKE 运算符一起使用。
+在 SQL 中，可使用以下通配符：
+（一）'%'	替代一个或多个字符
+（二）'_'	仅替代一个字符
+（三）[charlist]	字符列中的任何单一字符
+（四）[^charlist]或者[!charlist]  不在字符列中的任何单一字
+
+例子1：从上面的 "Persons" 表中选取Number中的倒数第二个数字为3的人
+select * from Persons where Number like ‘%3_’
+例子2：从上面的 "Persons" 表中选取居住的城市以 "B" 或 "L" 或 "N" 开头的人
+select * from Persons where City LIKE ‘B%’ or City LIKE 'L%' or City LIKE 'N%';
+SELECT * FROM Persons WHERE City LIKE '[BLN]%';
+例子3：从上面的 "Persons" 表中选取居住的城市不以 "B" 或 "L" 或 "N" 开头的人
+select * from Persons where City like '[!BLN]%';
+
+十三.IN 操作符
+IN 操作符允许我们在 WHERE 子句中规定多个值。
+SQL IN 语法:SELECT column_name(s) FROM table_name WHERE column_name IN (value1,value2,...)
+例子1：从Persons表中选取LastName为 Adams 和 Carter 的人
+select * from Persons LastName in ('Adams','Carter');
+select * from Persons where LastName='Adams' or LastName='Carter';
+
+十四.BETWEEN 操作符
+操作符 BETWEEN ... AND 会选取介于两个值之间的数据范围。这些值可以是数值、文本或者日期
+语法:SELECT column_name(s) FROM table_name WHERE column_name BETWEEN value1 AND value2
+例子1：在Persons表中查询以字母顺序显示介于 "Adams"（包括）和 "Carter"（不包括）之间的人
+select * from Persons where LastName BETWEEN 'Adams' AND 'Carter';
+例子2：在Persons表中查询介于 "Adams"（包括）和 "Carter"（不包括）之间的人，请使用 NOT 操作符：
+select * from Persons where LastName NOT BETWEEN 'Adams' AND 'Carter';
+
+十五.Alias
+通过使用 SQL，可以为列名称和表名称指定别名（Alias）
+表的 SQL Alias 语法: SELECT column_name(s) FROM table_name AS alias_name
+列的 SQL Alias 语法: SELECT column_name AS alias_name FROM table_name
+
+十六.JOIN
+join用于根据两个或多个表中的列之间的关系，从这些表中查询数据
+（一）JOIN: 如果表中有至少一个匹配，则返回行;INNER JOIN 与 JOIN 是相同的
+INNER JOIN 关键字语法:SELECT column_name(s) FROM table_name1 INNER JOIN table_name2 ON table_name1.column_name=table_name2.column_name
+（二）LEFT JOIN: LEFT JOIN 关键字会从左表 (table_name1) 那里返回所有的行，即使在右表 (table_name2) 中没有匹配的行;注释：在某些数据库中， LEFT JOIN 称为 LEFT OUTER JOIN。
+LEFT JOIN 关键字语法:SELECT column_name(s) FROM table_name1 LEFT JOIN table_name2 ON table_name1.column_name=table_name2.column_name
+（三）RIGHT JOIN: RIGHT JOIN 关键字会右表 (table_name2) 那里返回所有的行，即使在左表 (table_name1) 中没有匹配的行。;注释：在某些数据库中， RIGHT JOIN 称为 RIGHT OUTER JOIN。
+RIGHT JOIN 关键字语法:SELECT column_name(s) FROM table_name1 RIGHT JOIN table_name2 ON table_name1.column_name=table_name2.column_name
+（四）FULL JOIN: 只要其中一个表中存在匹配，就返回行
+FULL JOIN 关键字语法:SELECT column_name(s) FROM table_name1 FULL JOIN table_name2 
+ON table_name1.column_name=table_name2.column_name
+例子1：我们可以通过引用两个表的方式，从两个表中获取数据：谁订购了产品，并且他们订购了什么产品？
+select Persons.LastName,Persons.FirstName FROM Persons,Orders WHERE Persons.Id_P = Orders.Id_P;
+例子2：通过Persons和Orders表中查询出所有人的订单
+select Orders.OrderNo,Persons.LastName from Persons inner join Orders ON Persons.Id_P = Orders.Id_P order by Persons.LastName;
+例子3：通过Persons和Orders表中查询所有的人，以及他们的定购 - 如果有的话。
+select * from Persons left join Orders on Persons.Id_P=Orders.Id_P;
+例子4：通过Persons和Orders表中查询所有的定单，以及定购它们的人 - 如果有的话
+select * from Persons right join Orders on Persons.Id_P=Orders.Id_P;
+例子5：通过Persons和Orders表中查询所有的人，以及他们的定单，以及所有的定单，以及定购它们的人。
+select * from Persons full join Orders on Persons.Id_P=Orders.Id_P;
+
+十七.UNION操作符
+UNION 操作符用于合并两个或多个 SELECT 语句的结果集。注释：默认地，UNION 操作符选取不同的值。如果允许重复的值，请使用 UNION ALL。
+请注意，UNION 内部的 SELECT 语句必须拥有相同数量的列。列也必须拥有相似的数据类型。同时，每条 SELECT 语句中的列的顺序必须相同。
+SQL UNION 语法:SELECT column_name(s) FROM table_name1 UNION SELECT column_name(s) FROM table_name2
+例子1：从Persons和Orders表中查询出Id_P为1的数据
+select * from Persons where Id_P=1 UNION select * from Orders where Id_P=1;
+例子2：从Persons和Orders表中查询出Id_P为1的所有数据
+select * from Persons where Id_P=1 UNION ALL select * from Orders where Id_P=1;
+
+十八.SELECT INTO 语句
+SELECT INTO 语句从一个表中选取数据，然后把数据插入另一个表中。
+SELECT INTO 语句常用于创建表的备份复件或者用于对记录进行存档。
+您可以把所有的列插入新表：SELECT * INTO new_table_name [IN externaldatabase] FROM old_tablename
+或者只把希望的列插入新表：SELECT column_name(s) INTO new_table_name [IN externaldatabase] FROM old_tablename
+
+十九.CREATE DATABASE 语句
+CREATE DATABASE database_name;
+
+二十.CREATE TABLE 语句
+SQL CREATE TABLE 语法:CREATE TABLE 表名称 (列名称1 数据类型,列名称2 数据类型,列名称3 数据类型,....)
+SQL中最常用的数据类型：
+integer(size)
+int(size)
+smallint(size)
+tinyint(size)
+仅容纳整数。在括号内规定数字的最大位数。
+decimal(size,d)
+numeric(size,d)
+容纳带有小数的数字。"size" 规定数字的最大位数。"d" 规定小数点右侧的最大位数。
+char(size):容纳固定长度的字符串（可容纳字母、数字以及特殊字符）。在括号中规定字符串的长度。
+varchar(size):容纳可变长度的字符串（可容纳字母、数字以及特殊的字符）。在括号中规定字符串的最大长度。
+date(yyyymmdd):容纳日期。
+例子1：创建名为 "Person" 的表。该表包含 5 个列，列名分别是："Id_P"、"LastName"、"FirstName"、"Address" 以及 "City"：
+create table Persons (Id_P int ,LastName varchar(255),FirstName varchar(255),Address varchar(255),City varchar(255));
+
+二十一.SQL 约束
+我们将主要探讨以下几种约束：
+NOT NULL：NOT NULL 约束强制列不接受 NULL 值。NOT NULL 约束强制字段始终包含值。这意味着，如果不向字段添加值，就无法插入新记录或者更新记录
+UNIQUE：UNIQUE 约束唯一标识数据库表中的每条记录。UNIQUE 和 PRIMARY KEY 约束均为列或列集合提供了唯一性的保证。PRIMARY KEY 拥有自动定义的 UNIQUE 约束。
+请注意，每个表可以有多个 UNIQUE 约束，但是每个表只能有一个 PRIMARY KEY 约束。
+PRIMARY KEY：PRIMARY KEY 约束唯一标识数据库表中的每条记录。主键必须包含唯一的值。主键列不能包含 NULL 值。每个表都应该有一个主键，并且每个表只能有一个主键。
+FOREIGN KEY：一个表中的 FOREIGN KEY 指向另一个表中的 PRIMARY KEY。
+CHECK：
+DEFAULT
+例子1：强制 "Id_P" 列和 "LastName" 列不接受 NULL 值
+create table Persons (Id_P int not null,LastName varchar(255) not null,FirstName varchar(255),Address varchar(255),City varchar(255));
+例子2：在 "Persons" 表创建时在 "Id_P" 列创建 UNIQUE 约束
+MySQL:create table Persons (Id_P int not null,LastName varchar(255),FirstName varchar(255),Address varchar(255),City varchar(255),UNIQUE(Id_P));
+例子3：如果需要命名 UNIQUE 约束，以及为多个列定义 UNIQUE 约束，请使用下面的 SQL 语法：
+CREATE TABLE Persons(Id_P int NOT NULL,LastName varchar(255) NOT NULL,FirstName varchar(255),Address varchar(255),City varchar(255),CONSTRAINT uc_PersonID UNIQUE (Id_P,LastName))
+例子4：当表已被创建时，如需在 "Id_P" 列创建 UNIQUE 约束，请使用下列 SQL：
+ALTER TABLE Persons ADD UNIQUE (Id_P)
+例子5：如需命名 UNIQUE 约束，并定义多个列的 UNIQUE 约束，请使用下面的 SQL
+ALTER TABLE Persons ADD CONSTRAINT uc_PersonID UNIQUE (Id_P,LastName)
+例子6：如需撤销 UNIQUE 约束，请使用下面的 SQL
+MySQL：ALTER TABLE Persons DROP INDEX uc_PersonID
+SQL Server / Oracle / MS Access：ALTER TABLE Persons DROP CONSTRAINT uc_PersonID
+例子7：在 "Persons" 表创建时在 "Id_P" 列创建 PRIMARY KEY 约束
+MySQL：create table Persons (Id_P int NOT NULL,LastName varchar(255) NOT NULL,FirstName varchar(255),Address varchar(255),City varchar(255),PRIMATY KEY (Id_P));
+SQL Server / Oracle / MS Access：CREATE TABLE Persons(Id_P int NOT NULL PRIMARY KEY,LastName varchar(255) NOT NULL,FirstName varchar(255),Address varchar(255),City varchar(255));
+例子8：如果需要命名 PRIMARY KEY 约束，以及为多个列定义 PRIMARY KEY 约束，请使用下面的 SQL 
+CREATE TABLE Persons (Id_P int NOT NULL,LastName varchar(255) NOT NULL,FirstName varchar(255),Address varchar(255),City varchar(255),CONSTRAINT pk_PersonID PRIMARY KEY (Id_P,LastName))；
+例子9：如果在表已存在的情况下为 "Id_P" 列创建 PRIMARY KEY 约束，请使用下面的 SQL
+ALTER TABLE Persons ADD PRIMARY KEY (Id_P)
+例子10：如果需要命名 PRIMARY KEY 约束，以及为多个列定义 PRIMARY KEY 约束，请使用下面的 SQL 
+ALTER TABLE Persons ADD CONSTRAINT pk_PersonID PRIMARY KEY (Id_P,LastName)
+注释：如果您使用 ALTER TABLE 语句添加主键，必须把主键列声明为不包含 NULL 值（在表首次创建时）。
+例子11：如需撤销 PRIMARY KEY 约束，请使用下面的 SQL
+MySQL：ALTER TABLE Persons DROP PRIMARY KEY
+SQL Server / Oracle / MS Access：ALTER TABLE Persons DROP CONSTRAINT pk_PersonID
+例子12：在 "Orders" 表创建时为 "Id_P" 列创建 FOREIGN KEY
+MySQL：create table Orders (Id_O int not null,OrderNo int not null,Id_P int,primary key(Id_O),foreign key(Id_P) references Persons(Id_P));
+SQL Server / Oracle / MS Access:
+create table Orders (Id_O int not null primary key,OrderNo int not null,Id_P int FOREIGN KEY REFERENCES Persons(Id_P));
+例子13：如果需要命名 FOREIGN KEY 约束，以及为多个列定义 FOREIGN KEY 约束，请使用下面的 SQL
+create table Orders (Id_O INT NOT NULL,OrderNo INT NOT NULL,Id_P INT,PRIMARY KEY(Id_O),CONSTRAINT fk_key FOREIGN key(Id_P) REFERENCES Persons(Id_P))；
+例子14：如果在 "Orders" 表已存在的情况下为 "Id_P" 列创建 FOREIGN KEY 约束，请使用下面的 SQL
+ALTER TABLE Orders ADD FOREIGN KEY (Id_P) REFERENCES Persons(Id_P);
+例子15：如果需要命名 FOREIGN KEY 约束，以及为多个列定义 FOREIGN KEY 约束，请使用下面的 SQL 
+ALTER TABLE Orders ADD CONSTRAINT fk_PerOrders FOREIGN KEY (Id_P) REFERENCES Persons(Id_P)
+例子16:如需撤销 FOREIGN KEY 约束，请使用下面的 SQL
+MySQL: ALTER TABLE Orders DROP FOREIGN KEY fk_PerOrders
+SQL Server / Oracle / MS Access: ALTER TABLE Orders DROP CONSTRAINT fk_PerOrders
+
+
+
